@@ -1,0 +1,40 @@
+h1 {
+    color: deeppink;
+}
+
+/* אם אין לך className="button" בכפתורים, זה לא ישפיע.
+   לכן עדיף לעצב את תגית button עצמה: */
+button {
+    background-color: pink;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* הכפתורים של בחירת צבע */
+.color-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.colors-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    gap: 15px;
+    border: 2px solid black;
+    padding: 10px;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+}
+
+input[type="number"] {
+    background-color: lightblue;
+}
+
+/* הכפתור GO TO GAME */
+.go {
+    background-color: deeppink;
+    color: white;
+}

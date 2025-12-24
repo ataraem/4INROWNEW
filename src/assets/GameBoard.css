@@ -1,0 +1,17 @@
+.board {
+    display: inline-block;
+    border: 2px solid black;
+    padding: 6px;
+    margin-top: 12px;
+}
+
+.board-row {
+    display: flex;
+}
+
+.board-col {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #444;
+    background: white; /* אם תרצי */
+}
