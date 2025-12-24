@@ -38,7 +38,7 @@ const moveToSettings = ()=> {
             }
         }
         return false;
-    };
+    }
 
 
 const createBoard =()=>{
