@@ -20,7 +20,7 @@ function App() {
         setScreen("SettingsGame")
     }
 
-   const switchToGame=()=>{
+    const switchToGame=()=>{
         setCurrentPlayer(1);
         setScreen("GameBoard");
     };
@@ -30,25 +30,25 @@ function App() {
         <>
             {screen ==="SettingsGame"&& (
                 <SettingsGame switchToGame={switchToGame}
-                  row={row}
-                  col={col}
-                  setRow={setRow}
-                  setCol={setCol}
-                  currentPlayer={currentPlayer}
-                  setCurrentPlayer={setCurrentPlayer}
+                              row={row}
+                              col={col}
+                              setRow={setRow}
+                              setCol={setCol}
+                              currentPlayer={currentPlayer}
+                              setCurrentPlayer={setCurrentPlayer}
                               colorP1={colorP1}
                               setColorP1={setColorP1}
                               colorP2={colorP2}
                               setColorP2={setColorP2}
 
                 />
-    )}
+            )}
             {screen ==="GameBoard" &&(
                 <GameBoard switchToSettings={switchToSettings}
-                 row={row}
-                 col={col}
-                 currentPlayer={currentPlayer}
-                 setCurrentPlayer={setCurrentPlayer}
+                           row={row}
+                           col={col}
+                           currentPlayer={currentPlayer}
+                           setCurrentPlayer={setCurrentPlayer}
                            colorP1={colorP1}
                            setColorP1={setColorP1}
                            colorP2={colorP2}
@@ -56,7 +56,7 @@ function App() {
 
                 />
             )}
-            </>
+        </>
     );
-    }
+}
 export default App;

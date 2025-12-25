@@ -3,85 +3,109 @@ import "./GameBoard.css"
 
 
 
+
 function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,colorP1,colorP2,setColorP1,setColorP2 }){
     const rows=Number(row);
     const cols=Number(col);
     const [winner,setWinner] = useState(null);
 
-const moveToSettings = ()=> {
-   if(winner !==null){
-        return switchToSettings ();
 
-   }
-}
-
-    const colVictoryCheck = (colIndex, currentColor, boardToCheck) => {
-        let count = 0;
-        for (let i = 0; i < boardToCheck.length; i++) {
-            if (boardToCheck[i][colIndex].color === currentColor) {
-                count++;
-                if (count === 4) return true;
-            } else {
-                count = 0;
-            }
+    const moveToSettings = ()=> {
+        if(winner !==null){
+            return switchToSettings ();
         }
-        return false;
-    };
-    const rowVictoryCheck = (rowIndex, currentColor, boardToCheck) => {
-        let count = 0;
-        for (let j = 0; j < cols; j++) {
-            if (boardToCheck[rowIndex][j].color === currentColor) {
-                count++;
-                if (count === 4) return true;
-            } else {
-                count = 0;
-            }
-        }
-        return false;
     }
 
-
-const createBoard =()=>{
-    const newBoard=[];
-    for (let i = 0; i < rows; i++){
-        const tempRow = []
-        for (let j = 0; j < cols; j++){
-            tempRow.push({value:"",color:"white"});
+    const createBoard =()=>{
+        const newBoard=[];
+        for (let i = 0; i < rows; i++){
+            const tempRow = []
+            for (let j = 0; j < cols; j++){
+                tempRow.push({value:"",color:"white"});
+            }
+            newBoard.push(tempRow);
         }
-        newBoard.push(tempRow);
+        return newBoard;
     }
-    return newBoard;
-}
 
     const [board,setBoard]= useState(createBoard);
 
-    const checkAvailabale = (rowIndex, colIndex) => {
-        if (winner) return;
-        const newBoard = board.map(r => r.map(c => ({ ...c })));
-        const playerColor = currentPlayer === 1 ? colorP1 : colorP2;
-        let found = false;
-        let lastRow = -1;
-        for (let i = rows - 1; i >= 0; i--) {
-            if (newBoard[i][colIndex].color === "white") {
-                newBoard[i][colIndex].color = playerColor;
-                found = true;
-                lastRow = i;
-                break;
-            }
-        }
 
-        if (found) {
-            const isColWin = colVictoryCheck(colIndex, playerColor, newBoard);
-            const isRowWin = rowVictoryCheck(lastRow, playerColor, newBoard);
+    const checkAvailabale = (rowIndex, colIndex) => {
+        const newBoard = [...board];
+        if (winner === null) {
+            let placedRow = -1;
+            let placedCol = colIndex;
+            for (let i = rows - 1; i >= 0; i--) {
+                if (newBoard[i][colIndex].color === "white") {
+                    (newBoard[i][colIndex].color = currentPlayer === 1 ? colorP1 : colorP2);
+                    placedRow = i;
+                    break;
+                }
+            }
+            if (placedRow === -1) return;
+
             setBoard(newBoard);
-            if (isColWin || isRowWin) {
-                setWinner(currentPlayer);
-                setTimeout(() => alert("Player " + currentPlayer + " Wins!"), 100);
+
+            if (chekRowWin(newBoard, placedRow)) {
+           return;
             } else {
-                setCurrentPlayer(p => (p === 1 ? 2 : 1));
+               if (chekColWin(newBoard, placedCol)) {
+                   return;
+               } }
+        }
+            setCurrentPlayer(p=>(p===1 ? 2:1));
+    };
+
+
+    const chekRowWin = (board, rowIndex) => {
+        let count = 1;
+        for (let j = 0; j < cols - 1; j++) {
+            const currentColor = board[rowIndex][j].color;
+            const nextColor = board[rowIndex][j + 1].color;
+            if (currentColor === "white") {
+                count = 1;
+                continue;
+            }
+
+            if (currentColor === nextColor) {
+                count++;
+                if (count === 4) {
+                    setWinner(currentPlayer);
+                    return true;
+                }
+            } else {
+                count = 1;
             }
         }
+        return false;
     };
+
+
+    const chekColWin = (board, colIndex) => {
+        let count = 1;
+        for (let i = 0; i < rows - 1; i++) {
+            const currentColor = board[i][colIndex].color;
+            const nextColor = board[i+1][colIndex].color;
+            if (currentColor === "white") {
+                count = 1;
+                continue;
+            }
+
+            if (currentColor === nextColor) {
+                count++;
+                if (count === 4) {
+                    setWinner(currentPlayer);
+                    return true;
+                }
+            } else {
+                count = 1;
+            }
+        }
+        return false;
+    };
+
+
     return(
 
         <div>
@@ -90,7 +114,15 @@ const createBoard =()=>{
                 GAME SCREEN
             </h3>
 
-       <h3>Current Player:{currentPlayer}</h3>
+            {
+                winner !== null && (
+                    <h2>
+                    player {winner} won!
+                    </h2>
+                )
+            }
+
+            <h3>Current Player:{currentPlayer}</h3>
             <div className="board">
                 {board.map((row, r)=> (
                     <div className="board-row" key={r}>
@@ -98,7 +130,7 @@ const createBoard =()=>{
                             <div className="board-col"
                                  onClick={()=>checkAvailabale(r,c)}
                                  key={c}
-                            style = {{backgroundColor:col.color}}>
+                                 style = {{backgroundColor:col.color}}>
 
                                 {col.value}
                             </div>
@@ -107,15 +139,15 @@ const createBoard =()=>{
                 ))}
             </div>
 
-        <div>
-            <br/>
-            <button onClick={moveToSettings}>
-                GO TO SETTINGS
-            </button>
+            <div>
+                <br/>
+                <button onClick={moveToSettings}>
+                    GO TO SETTINGS
+                </button>
+
+            </div>
 
         </div>
-
-      </div>
-    )
+    );
 }
 export default GameBoard;
