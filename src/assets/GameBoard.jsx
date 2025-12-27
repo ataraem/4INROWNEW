@@ -36,6 +36,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
         if (winner === null) {
             let placedRow = -1;
             let placedCol = colIndex;
+
             for (let i = rows - 1; i >= 0; i--) {
                 if (newBoard[i][colIndex].color === "white") {
                     (newBoard[i][colIndex].color = currentPlayer === 1 ? colorP1 : colorP2);
@@ -44,15 +45,18 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
                 }
             }
             if (placedRow === -1) return;
-
             setBoard(newBoard);
-
             if (chekRowWin(newBoard, placedRow)) {
            return;
             } else {
                if (chekColWin(newBoard, placedCol)) {
                    return;
-               } }
+               } else {
+                   if (leftMainDiagonal(newBoard, placedCol,placedRow)){
+                       return;
+                   }
+               }
+            }
         }
             setCurrentPlayer(p=>(p===1 ? 2:1));
     };
@@ -62,13 +66,12 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
         let count = 1;
         for (let j = 0; j < cols - 1; j++) {
             const currentColor = board[rowIndex][j].color;
-            const nextColor = board[rowIndex][j + 1].color;
             if (currentColor === "white") {
                 count = 1;
                 continue;
             }
 
-            if (currentColor === nextColor) {
+            if (currentColor === board[rowIndex][j + 1].color) {
                 count++;
                 if (count === 4) {
                     setWinner(currentPlayer);
@@ -86,16 +89,37 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
         let count = 1;
         for (let i = 0; i < rows - 1; i++) {
             const currentColor = board[i][colIndex].color;
-            const nextColor = board[i+1][colIndex].color;
             if (currentColor === "white") {
                 count = 1;
                 continue;
             }
 
-            if (currentColor === nextColor) {
+            if (currentColor === board[i+1][colIndex].color) {
                 count++;
                 if (count === 4) {
                     setWinner(currentPlayer);
+                    return true;
+                }
+            } else {
+                count = 1;
+            }
+        }
+        return false;
+    };
+
+    const leftMainDiagonal = (board, colIndex) => {
+        let count = 1;
+        const limit = Math.min(rows, cols);
+        for (let i = 0; i < limit - 1; i++) {
+            const currentColor = board[i][i].color;
+            if (currentColor === "white") {
+                count = 1;
+                continue;
+            }
+            if (currentColor === board[i + 1][i + 1].color) {
+                count++;
+                if (count === 4) {
+                    setWinner(currentPlayer)
                     return true;
                 }
             } else {

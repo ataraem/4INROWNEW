@@ -17,6 +17,9 @@ function App() {
 
 
     const switchToSettings = ()=> {
+        setColorP1(null);
+        setColorP2(null);
+        setCurrentPlayer(1);
         setScreen("SettingsGame")
     }
 
