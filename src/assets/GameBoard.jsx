@@ -47,18 +47,23 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
             if (placedRow === -1) return;
             setBoard(newBoard);
             if (chekRowWin(newBoard, placedRow)) {
-           return;
+                return;
             } else {
-               if (chekColWin(newBoard, placedCol)) {
-                   return;
-               } else {
-                   if (leftMainDiagonal(newBoard, placedCol,placedRow)){
-                       return;
-                   }
-               }
+                if (chekColWin(newBoard, placedCol)) {
+                    return;
+                } else {
+                    if (leftMainDiagonal(newBoard, placedCol,placedRow)){
+                        return;
+                    }
+                    else {
+                        if (rightMainDiagonal(newBoard)){
+                            return;
+                        }
+                    }
+                }
             }
         }
-            setCurrentPlayer(p=>(p===1 ? 2:1));
+        setCurrentPlayer(p=>(p===1 ? 2:1));
     };
 
 
@@ -107,7 +112,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
         return false;
     };
 
-    const leftMainDiagonal = (board, colIndex) => {
+    const leftMainDiagonal = (board) => {
         let count = 1;
         const limit = Math.min(rows, cols);
         for (let i = 0; i < limit - 1; i++) {
@@ -129,6 +134,31 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
         return false;
     };
 
+    const rightMainDiagonal = (board) => {
+        let count = 1;
+        const limit = Math.min(rows, cols);
+        for (let i = limit - 1; i > 0; i--) {
+            const j = (limit - 1) - i;
+            const currentColor = board[i][j].color;
+            if (currentColor === "white") {
+                count = 1;
+                continue;
+            }
+            const prevJ = (limit - 1) - (i - 1);
+            if (board[i - 1][prevJ].color === currentColor) {
+                count++;
+                if (count === 4) {
+                    setWinner(currentPlayer);
+                    return true;
+                }
+            } else {
+                count = 1;
+            }
+        }
+
+        return false;
+    };
+
 
     return(
 
@@ -141,7 +171,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
             {
                 winner !== null && (
                     <h2>
-                    player {winner} won!
+                        player {winner} won!
                     </h2>
                 )
             }
