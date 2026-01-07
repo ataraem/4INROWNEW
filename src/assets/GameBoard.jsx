@@ -8,6 +8,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
     const rows=Number(row);
     const cols=Number(col);
     const [winner,setWinner] = useState(null);
+    const [scores, setScores] = useState({ p1: 0, p2: 0 });
 
 
     const moveToSettings = ()=> {
@@ -80,6 +81,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
                 count++;
                 if (count === 4) {
                     setWinner(currentPlayer);
+                    setScores(prev => ({...prev, [currentPlayer === 1 ? 'p1' : 'p2']: prev[currentPlayer === 1 ? 'p1' : 'p2'] + 1}));
                     return true;
                 }
             } else {
@@ -103,6 +105,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
                 count++;
                 if (count === 4) {
                     setWinner(currentPlayer);
+                    setScores(prev => ({...prev, [currentPlayer === 1 ? 'p1' : 'p2']: prev[currentPlayer === 1 ? 'p1' : 'p2'] + 1}));
                     return true;
                 }
             } else {
@@ -124,7 +127,8 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
             if (currentColor === board[i + 1][i + 1].color) {
                 count++;
                 if (count === 4) {
-                    setWinner(currentPlayer)
+                    setWinner(currentPlayer);
+                    setScores(prev => ({...prev, [currentPlayer === 1 ? 'p1' : 'p2']: prev[currentPlayer === 1 ? 'p1' : 'p2'] + 1}));
                     return true;
                 }
             } else {
@@ -149,6 +153,7 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
                 count++;
                 if (count === 4) {
                     setWinner(currentPlayer);
+                    setScores(prev => ({...prev, [currentPlayer === 1 ? 'p1' : 'p2']: prev[currentPlayer === 1 ? 'p1' : 'p2'] + 1}));
                     return true;
                 }
             } else {
@@ -164,6 +169,17 @@ function GameBoard({switchToSettings,row,col, currentPlayer,setCurrentPlayer,col
 
         <div>
             <h1> LET'S PLAY </h1>
+
+            <div className="score-display">
+                <div style={{color: colorP1}}>
+                    Player 1: {scores.p1}
+                </div>
+                <div style={{color: colorP2}}>
+                    Player 2: {scores.p2}
+                </div>
+
+            </div>
+
             <h3>
                 GAME SCREEN
             </h3>
